@@ -2,8 +2,10 @@ import React from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
-import { Card, Select, Button } from '../components';
-import articles from '../constants/articles';
+import { Card, Button, Calendar, Select } from '../components';
+// import { Select } from '../components/Select';
+
+// import articles from '../constants/articles';
 const { width } = Dimensions.get('screen');
 
 class Home extends React.Component {
@@ -12,31 +14,54 @@ class Home extends React.Component {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.articles}>
-        <Block column space="evenly">
-          <Block flex left style={{marginTop: 8}}>
+        <Block column>
+          <Block flex left style={{ marginTop: 8 }}>
             <Text h6 style={{ marginBottom: theme.SIZES.BASE / 2 }}>
               Programa
             </Text>
             <Select
-              defaultIndex={1}
-              options={["01", "02", "03", "04", "05"]}
+              // selectedItem="Masaje de Descarga"
+              options={["Entrenamiento Funcional", "Masaje de Descarga", "Fisioterapia"]}
             />
           </Block>
-          <Block>
-            <Button center color="default" style={styles.optionsButton}>
-              SAVE FOR LATER
-            </Button>
+
+          <Calendar />
+
+          {/* <Block flex left style={{ marginTop: 8 }}>
+            <Text h6 style={{ marginBottom: theme.SIZES.BASE / 2 }}>
+              Programa
+            </Text>
+            <Select
+              selectedItem="Masaje de Descarga"
+              options={["Entrenamiento Funcional", "Masaje de Descarga", "Fisioterapia"]}
+            />
+          </Block> */}
+
+
+          <Block flex left style={{ marginTop: 18 }}>
+            <Text h6 style={{ marginBottom: theme.SIZES.BASE / 2 }}>
+              Clase
+            </Text>
+            <Select
+              // selectedItem="Masaje de Descarga"
+              options={["06:00 AM", "07:30 AM", "08:30 AM"]}
+              // options={["Entrenamiento Funcional", "Masaje de Descarga", "Fisioterapia"]}
+            />
           </Block>
+
+          <Button style={styles.optionsButton}>
+            RESERVAR
+          </Button>
         </Block>
-        <Block flex>
-          <Card item={articles[0]} horizontal  />
+        {/* <Block flex>
+          <Card item={articles[0]} horizontal />
           <Block flex row>
             <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
             <Card item={articles[2]} />
           </Block>
           <Card item={articles[3]} horizontal />
           <Card item={articles[4]} full />
-        </Block>
+        </Block> */}
       </ScrollView>
     )
   }
@@ -52,11 +77,17 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   home: {
-    width: width,    
+    width: width,
   },
   articles: {
     width: width - theme.SIZES.BASE * 2,
     paddingVertical: theme.SIZES.BASE,
+  },
+  optionsButton: {
+    width: "auto",
+    height: 40,
+    paddingHorizontal: theme.SIZES.BASE,
+    paddingVertical: 10
   },
 });
 
