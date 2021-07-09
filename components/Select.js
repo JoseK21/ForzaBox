@@ -1,22 +1,18 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Block, Text } from 'galio-framework';
 
 import Icon from './Icon';
 import { argonTheme } from '../constants';
-import { useState } from 'react';
 
-export const Select = ({ selectedItem, ...other }) => {
+const Select = ({ options, ...others }) => {
+  const parentRef = useRef(null);
+  const childrenRef = useRef(null);
 
-  const { onSelect, iconName, iconFamily, iconSize, iconColor, color, textStyle, style, options } = other;
+  const [state, setState] = useState(options[0])
 
-  const [state, setState] = useState(selectedItem || options[0])
-  const handleOnSelect = (index, value) => {
-    setState(value);
-    onSelect && onSelect(index, value);
-  }
+  const { onSelect, iconName, iconFamily, iconSize, iconColor, color, textStyle, style, ...props } = others;
 
   const modalStyles = [
     styles.qty,
@@ -26,98 +22,69 @@ export const Select = ({ selectedItem, ...other }) => {
 
   const textStyles = [
     styles.text,
-    textStyle
+    textStyle,
   ];
+
+  const handleOnSelect = (index, value) => {
+    setState( value );
+    onSelect && onSelect(index, value);
+  }
+
+  const [wi, setWi] = useState('auto')
+
+  useEffect(() => console.log('<wi>', wi), [wi])
 
   return (
     <ModalDropdown
+      ref={parentRef}
       style={modalStyles}
       onSelect={handleOnSelect}
-      dropdownStyle={styles.dropdown}
+      dropdownStyle={toWidth(wi)}
       dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
-      {...other}>
-      <Block flex row middle space="between">
+      options={options}
+      {...others}
+      onLayout={(event) => {
+        const { width } = event.nativeEvent.layout;
+        setWi(width)
+      }} 
+      >
+      <Block flex row middle space="between" ref={childrenRef}>
         <Text size={12} style={textStyles}>{state}</Text>
         <Icon name={iconName || "nav-down"} family={iconFamily || "ArgonExtra"} size={iconSize || 10} color={iconColor || argonTheme.COLORS.WHITE} />
       </Block>
     </ModalDropdown>
   )
 }
-class DropDown extends React.Component {
-  state = {
-    value: 1,
-  }
-
-  handleOnSelect = (index, value) => {
-    const { onSelect } = this.props;
-
-    this.setState({ value: value });
-    onSelect && onSelect(index, value);
-  }
-
-  render() {
-    const { onSelect, iconName, iconFamily, iconSize, iconColor, color, textStyle, style, ...props } = this.props;
-
-    const modalStyles = [
-      styles.qty,
-      color && { backgroundColor: color },
-      style
-    ];
-
-    const textStyles = [
-      styles.text,
-      textStyle
-    ];
-
-    return (
-      <ModalDropdown
-        style={modalStyles}
-        onSelect={this.handleOnSelect}
-        dropdownStyle={styles.dropdown}
-        dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
-        {...props}>
-        <Block flex row middle space="between">
-          <Text size={12} style={textStyles}>{this.state.value}</Text>
-          <Icon name={iconName || "nav-down"} family={iconFamily || "ArgonExtra"} size={iconSize || 10} color={iconColor || argonTheme.COLORS.WHITE} />
-        </Block>
-      </ModalDropdown>
-    )
-  }
-}
-
-DropDown.propTypes = {
-  onSelect: PropTypes.func,
-  iconName: PropTypes.string,
-  iconFamily: PropTypes.string,
-  iconSize: PropTypes.number,
-  color: PropTypes.string,
-  textStyle: PropTypes.any,
-};
 
 const styles = StyleSheet.create({
   qty: {
     width: '100%',
-    backgroundColor: argonTheme.COLORS.DEFAULT,
-    paddingHorizontal: 16,
     paddingTop: 10,
-    paddingBottom: 9.5,
     borderRadius: 4,
-    shadowColor: "rgba(0, 0, 0, 0.1)",
-    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     shadowOpacity: 1,
+    paddingBottom: 9.5,
+    paddingHorizontal: 16,
+    shadowColor: "rgba(0, 0, 0, 0.1)",
+    shadowOffset: { width: 0, height: 2 },
+    backgroundColor: argonTheme.COLORS.DEFAULT,
   },
   text: {
-    color: argonTheme.COLORS.WHITE,
-    fontWeight: '600',
     paddingRight: 10,
+    fontWeight: '600',
+    color: argonTheme.COLORS.WHITE,
   },
   dropdown: {
     marginTop: 8,
-    marginLeft: -16,
-    width: 'auto',
     height: 'auto',
+    marginLeft: -16,
   },
 });
 
-export default DropDown;
+export const toWidth = (newWidth) => StyleSheet.flatten([
+  styles.dropdown,
+  { width: newWidth },
+])
+
+export default Select;
+

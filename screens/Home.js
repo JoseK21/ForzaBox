@@ -20,32 +20,18 @@ class Home extends React.Component {
               Programa
             </Text>
             <Select
-              // selectedItem="Masaje de Descarga"
               options={["Entrenamiento Funcional", "Masaje de Descarga", "Fisioterapia"]}
             />
           </Block>
 
           <Calendar />
 
-          {/* <Block flex left style={{ marginTop: 8 }}>
-            <Text h6 style={{ marginBottom: theme.SIZES.BASE / 2 }}>
-              Programa
-            </Text>
-            <Select
-              selectedItem="Masaje de Descarga"
-              options={["Entrenamiento Funcional", "Masaje de Descarga", "Fisioterapia"]}
-            />
-          </Block> */}
-
-
           <Block flex left style={{ marginTop: 18 }}>
             <Text h6 style={{ marginBottom: theme.SIZES.BASE / 2 }}>
               Clase
             </Text>
             <Select
-              // selectedItem="Masaje de Descarga"
-              options={["06:00 AM", "07:30 AM", "08:30 AM"]}
-              // options={["Entrenamiento Funcional", "Masaje de Descarga", "Fisioterapia"]}
+              options={["06:00 AM", "07:30 AM", "08:30 AM", "09:30 AM", "03:00 AM", "04:30 AM", "05:30 AM", "06:30 AM", "07:30 AM"]}
             />
           </Block>
 
